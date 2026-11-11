@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏅 СпортТовары: Пульс Новичка (HR Dashboard)
 
-## Getting Started
+Веб-дашборд мониторинга адаптации и раннего удержания новых сотрудников (склад, магазины, оптовые продажи, офис).  
+Разработано в рамках тестового задания по слову **«НОВИЧОК»**.
 
-First, run the development server:
+🔗 **Демо:** [Ссылка на Vercel](https://novichok-dashboard.vercel.app/)  
+🤖 **Telegram-бот новичка:** [@sport_onboarding_test_bot](https://t.me/sport_onboarding_test_bot)
+
+---
+
+## 🎯 Бизнес-задача
+
+В компании со штатом ~400 человек и наймом 100+ людей в год каждый третий увольняется до окончания 3 месяцев (испытательного срока).  
+Линейный персонал (кладовщики, продавцы) не сидит за ПК в Битрикс24 и часто уходит из-за ощущения брошенности и невысказанного стресса первых недель.
+
+**Решение:**
+
+1. Выявление скрытого стресса новичка через ежедневный вечерний микро-пульс в Telegram (обед, доступность наставника, понятность задач).
+2. Оперативный пульт HR и руководителей смен: «светофор» риска увольнений, управление персональными чеклистами задач и вызов на встречу 1-на-1 в Битрикс24.
+
+---
+
+## 🚀 Ключевые возможности дашборда
+
+- **⚡ Realtime WebSockets:** Мгновенное обновление статусов риска, чеклистов и сигналов SOS без перезагрузки страницы (Supabase Realtime).
+- **🚦 Светофор риска увольнения:** Автоматический скоринг по бытовым факторам (🔴 Критический риск, 🟡 Внимание, 🟢 В норме).
+- **📝 Управление задачами смены:**
+  - Просмотр чеклиста сотрудника и интерактивное переключение статусов.
+  - Построчное добавление задач новичку (синхронизируется с ботом).
+  - Массовое назначение общей задачи всем сотрудникам или конкретному отделу («Задача для всех»).
+- **🚨 Обработка сигналов SOS:** Выделенный бейдж тревоги при запросе экстренной помощи и кнопка снятия тревоги после решения вопроса.
+- **🔔 Реальные Telegram-уведомления:** Отправка push-напоминаний через Telegram Bot API тем сотрудникам, кто ещё не прошёл опрос.
+- **👥 Зависимые выпадающие списки:** При добавлении сотрудника должности и наставник автоматически привязываются к выбранному отделу согласно штатному расписанию.
+- **📱 Адаптивный дизайн:** Полноценная поддержка мобильных устройств, планшетов и десктопов.
+
+---
+
+## 🛠 Стек технологий
+
+- **Фреймворк:** Next.js 16 (App Router, React 19)
+- **Стилизация:** Tailwind CSS 4
+- **Архитектура:** Feature-Sliced Design (FSD) + кастомный хук `useOnboarding`
+- **Иконки:** Lucide React
+- **База данных:** Supabase (PostgreSQL + Realtime WebSockets)
+- **Деплой:** Vercel
+
+---
+
+## 💻 Локальный запуск
 
 ```bash
+# 1. Клонировать репозиторий
+git clone git@github.com:lysy1313/novichok-dashboard.git
+cd novichok-dashboard
+
+# 2. Установить зависимости
+npm install
+
+# 3. Настроить переменные окружения (.env.local)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+
+# 4. Запустить локальный сервер
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
