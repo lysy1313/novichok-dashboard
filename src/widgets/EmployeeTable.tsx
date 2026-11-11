@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckSquare, CheckCircle2, Send } from 'lucide-react';
+import { CheckSquare, CheckCircle2, Send, AlertOctagon } from 'lucide-react';
 import { EmployeeWithDetails, RiskLevel } from '@/shared/types';
 
 interface Props {
@@ -103,20 +103,29 @@ export const EmployeeTable: React.FC<Props> = ({
 
                     <td className="px-5 py-4">
                       {check ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-xs">
-                            <span className={check.lunch_ok ? 'text-emerald-600 font-medium' : 'text-red-600 font-bold'}>
-                              {check.lunch_ok ? '✓ Обед был' : '✗ БЕЗ ОБЕДА'}
-                            </span>
-                            <span>•</span>
-                            <span className={check.mentor_helped ? 'text-emerald-600 font-medium' : 'text-red-600 font-bold'}>
-                              {check.mentor_helped ? '✓ Наставник помог' : '✗ ОСТАЛСЯ ОДИН'}
-                            </span>
-                            <span>•</span>
-                            <span className={check.tasks_clear ? 'text-emerald-600 font-medium' : 'text-amber-600 font-medium'}>
-                              {check.tasks_clear ? '✓ Задачи ясны' : '⚠ Задачи не ясны'}
-                            </span>
-                          </div>
+                        <div className="space-y-1.5">
+                          {/* Если нажат сигнал SOS - выводим четкую плашку тревоги */}
+                          {check.sos_signal ? (
+                            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-red-700 bg-red-100/80 px-2.5 py-1 rounded-lg border border-red-200 animate-pulse">
+                              <AlertOctagon className="w-3.5 h-3.5 text-red-600" />
+                              <span>ТРЕВОГА: Нажат экстренный сигнал SOS</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 text-xs">
+                              <span className={check.lunch_ok ? 'text-emerald-600 font-medium' : 'text-red-600 font-bold'}>
+                                {check.lunch_ok ? '✓ Обед был' : '✗ БЕЗ ОБЕДА'}
+                              </span>
+                              <span>•</span>
+                              <span className={check.mentor_helped ? 'text-emerald-600 font-medium' : 'text-red-600 font-bold'}>
+                                {check.mentor_helped ? '✓ Наставник помог' : '✗ ОСТАЛСЯ ОДИН'}
+                              </span>
+                              <span>•</span>
+                              <span className={check.tasks_clear ? 'text-emerald-600 font-medium' : 'text-amber-600 font-medium'}>
+                                {check.tasks_clear ? '✓ Задачи ясны' : '⚠ Задачи не ясны'}
+                              </span>
+                            </div>
+                          )}
+
                           {check.comment && (
                             <p className="text-xs text-slate-700 italic bg-amber-50/70 p-2 rounded-xl border border-amber-200/70">
                               💬 «{check.comment}»
