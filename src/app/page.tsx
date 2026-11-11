@@ -32,7 +32,6 @@ export default function Home() {
   const [isBroadcastModalOpen, setIsBroadcastModalOpen] = useState(false);
   const [selectedEmpId, setSelectedEmpId] = useState<number | null>(null);
 
-  // Всегда актуальный сотрудник для модалки задач
   const selectedEmpForTasks: EmployeeWithDetails | null = selectedEmpId
     ? rawEmployees.find((e) => e.id === selectedEmpId) || null
     : null;
@@ -68,6 +67,7 @@ export default function Home() {
           employees={employees}
           onOpenTasksModal={(emp) => setSelectedEmpId(emp.id)}
           onCreateBitrixTask={actions.createBitrixTask}
+          onResolveSos={actions.resolveSos}
         />
       </main>
 

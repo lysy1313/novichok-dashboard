@@ -1,19 +1,21 @@
 'use client';
 
 import React from 'react';
-import { CheckSquare, CheckCircle2, Send, AlertOctagon } from 'lucide-react';
-import { EmployeeWithDetails, RiskLevel } from '@/shared/types';
+import { CheckSquare, CheckCircle2, Send, AlertOctagon, Check } from 'lucide-react';
+import { EmployeeWithDetails, RiskLevel, PulseCheckRow } from '@/shared/types';
 
 interface Props {
   employees: EmployeeWithDetails[];
   onOpenTasksModal: (emp: EmployeeWithDetails) => void;
   onCreateBitrixTask: (emp: EmployeeWithDetails) => void;
+  onResolveSos: (checkId: number, check: PulseCheckRow) => void;
 }
 
 export const EmployeeTable: React.FC<Props> = ({
   employees,
   onOpenTasksModal,
   onCreateBitrixTask,
+  onResolveSos,
 }) => {
   return (
     <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
@@ -104,11 +106,20 @@ export const EmployeeTable: React.FC<Props> = ({
                     <td className="px-5 py-4">
                       {check ? (
                         <div className="space-y-1.5">
-                          {/* Если нажат сигнал SOS - выводим четкую плашку тревоги */}
                           {check.sos_signal ? (
-                            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-red-700 bg-red-100/80 px-2.5 py-1 rounded-lg border border-red-200 animate-pulse">
-                              <AlertOctagon className="w-3.5 h-3.5 text-red-600" />
-                              <span>ТРЕВОГА: Нажат экстренный сигнал SOS</span>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-red-700 bg-red-100/80 px-2.5 py-1 rounded-lg border border-red-200">
+                                <AlertOctagon className="w-3.5 h-3.5 text-red-600" />
+                                <span>ТРЕВОГА: Нажат сигнал SOS</span>
+                              </div>
+                              <button
+                                onClick={() => onResolveSos(check.id, check)}
+                                className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-white hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 px-2 py-1 rounded-lg border border-slate-200 shadow-2xs transition cursor-pointer"
+                                title="Нажмите, если связались с сотрудником и уладили проблему"
+                              >
+                                <Check className="w-3 h-3 text-emerald-600" />
+                                <span>Снять тревогу</span>
+                              </button>
                             </div>
                           ) : (
                             <div className="flex items-center gap-2 text-xs">

@@ -75,7 +75,6 @@ export function useOnboarding() {
     setLoading(false);
   }, []);
 
-  // Realtime подписка на веб-сокеты Supabase
   useEffect(() => {
     let active = true;
 
@@ -109,7 +108,6 @@ export function useOnboarding() {
     };
   }, [fetchData]);
 
-  // Мутации
   const addEmployee = async (data: { full_name: string; department: string; role: string; mentor_name: string }) => {
     const { error } = await supabase.from('employees').insert([
       {
@@ -210,7 +208,33 @@ export function useOnboarding() {
     }
   };
 
-  // KPI метрики
+  // Снятие тревоги SOS со стороны HR
+  const resolveSos = async (checkId: number, check: PulseCheckRow) => {
+    // Пересчитываем реальный уровень риска без фактора SOS
+    let recalculatedRisk: RiskLevel = 'GREEN';
+    if (!check.lunch_ok || !check.mentor_helped) {
+      recalculatedRisk = 'RED';
+    } else if (!check.tasks_clear) {
+      recalculatedRisk = 'YELLOW';
+    }
+
+    const { error } = await supabase
+      .from('pulse_checks')
+      .update({
+        sos_signal: false,
+        risk_level: recalculatedRisk,
+        comment: (check.comment || '') + ' [Вопрос решён HR]',
+      })
+      .eq('id', checkId);
+
+    if (!error) {
+      showToast('✅ Тревога SOS снята, вопрос с сотрудником урегулирован', 'success');
+      await fetchData();
+    } else {
+      showToast('Ошибка снятия тревоги: ' + error.message, 'error');
+    }
+  };
+
   const kpi = {
     total: employees.length,
     redRisks: employees.filter((e) => e.latest_check?.risk_level === 'RED').length,
@@ -218,7 +242,6 @@ export function useOnboarding() {
     sosCount: employees.filter((e) => e.latest_check?.sos_signal).length,
   };
 
-  // Фильтрованный и отсортированный список
   const processedEmployees = useMemo(() => {
     const baseList = filterDept === 'Все'
       ? [...employees]
@@ -261,6 +284,7 @@ export function useOnboarding() {
       deleteTask,
       addTask,
       broadcastTask,
+      resolveSos,
     },
   };
 }
